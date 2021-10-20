@@ -57,16 +57,16 @@ const Link = (props) => {
 // Inside the svg component:
 const MyComponent = (
   return (
-    <svg style={{ width: '100vw', height: '100vh' }}>
+    <svg>
       <Graph>
-        <Node uid={0} x={110} y={100} color={'blue'} />
-        <Node uid={1} x={50} y={pos} color={'orange'} />
-        <Node uid={2} x={150} y={80} color={'red'} />
-        <Node uid={'x'} x={0} y={0} color={'turquoise'} />
+        <Node uid={0} x={110} y={100} color='red'/>
+        <Node uid={1} x={50} y={30} color='orange' />
+        <Node uid={2} x={150} y={80} color='green' />
+        <Node uid='k' x={0} y={0} color='blue' />
 
         <Link source={0} target={1} />
         <Link source={1} target={2} />
-        <Link source={1} target={'x'} />
+        <Link source={1} target='k' />
       </Graph>
     </svg>
   )
