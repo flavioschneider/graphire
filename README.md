@@ -83,7 +83,14 @@ const Link = (props) => {
 }
 ```
 
+Simple SVG example [codesandbox](https://codesandbox.io/s/graphire-svg-simple-graph-example-eftpc?file=/src/App.js:184-633) 
+
 <a href="https://codesandbox.io/s/graphire-svg-simple-graph-example-eftpc?file=/src/App.js:184-633"><img src="markdown/svg-example.png"></a>
+
+Bubble SVG example [codesandbox](https://codesandbox.io/s/graphire-svg-bubble-example-e33ss)
+
+<a href="https://codesandbox.io/s/graphire-svg-bubble-example-e33ss"><img src="markdown/svg-bubble-example.png"></a>
+
 
 ## Use with R3F (2D/3D)
 Check out the [codesandbox](https://codesandbox.io/s/graphire-forcelayout-example-jet3q) example. 
@@ -129,6 +136,7 @@ export const ForceCustom = (props) => {
 
 ## Goals:
 Short-term: 
+- [ ] Overlapping nodes have no repulsion collision/manyBody. 
 
 Medium-term:
 - [ ] Make many-body simulation more efficient e.g. with fast multipole method.
