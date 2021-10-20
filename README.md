@@ -3,7 +3,7 @@
 [![NPM](https://img.shields.io/npm/v/graphire.svg)](https://www.npmjs.com/package/graphire) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 
-<a href="https://codesandbox.io/s/graphire-forcelayout-example-jet3q"><img src="markdown/screenshot.png"></a>
+<a href="https://codesandbox.io/s/graphire-forcelayout-example-jet3q"><img src="markdown/preview.png"></a>
 
 > A fully declarative unopinionated react graph library.
 
@@ -30,14 +30,16 @@ const MyComponent = (
   return (
     <svg>
       <Graph>
-        <Node uid={0} x={110} y={100} color='red'/>
+        <Node uid={0} x={110} y={300} color='red'/>
         <Node uid={1} x={50} y={30} color='orange' />
         <Node uid={2} x={150} y={80} color='green' />
-        <Node uid='k' x={0} y={0} color='blue' />
+        <Node uid='k' x={200} y={200} color='blue' />
+        <Node uid={3} x={400} y={100} color='yellow' />
 
         <Link source={0} target={1} />
         <Link source={1} target={2} />
         <Link source={1} target='k' />
+        <Link source={3} target='k' />
       </Graph>
     </svg>
   )
@@ -74,12 +76,14 @@ const Link = (props) => {
     ref.current.setAttribute('y1', y1)  
     ref.current.setAttribute('x2', x2)  
     ref.current.setAttribute('y2', y2)  
-  }, source, target)
+  }, source, target, rest)
   return (
     <line ref={ref} x1='0' y1='0' x2='0' y2='0' stroke={color} strokeWidth={1} />
   )
 }
 ```
+
+<a href="https://codesandbox.io/s/graphire-svg-simple-graph-example-eftpc?file=/src/App.js:184-633"><img src="markdown/svg-example.png"></a>
 
 ## Use with R3F (2D/3D)
 Check out the [codesandbox](https://codesandbox.io/s/graphire-forcelayout-example-jet3q) example. 
