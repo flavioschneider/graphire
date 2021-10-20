@@ -14,7 +14,7 @@
 npm install graphire
 ```
 or
-```bash 
+```bash
 yarn add graphire
 ```
 
@@ -22,43 +22,8 @@ yarn add graphire
 
 ## Use with SVG (2D)
 
-1. Build a `Node` component using the `useNode` hook.
-```jsx 
-import { useRef } from 'react'
-import { useNode } from 'graphire'
+1. Use `Node` and `Link`components  (defined in step 2 and 3) inside an svg by using the `Graph` wrapper.
 
-const Node = (props) => {
-  const { color='black', radius=5, ...rest } = props
-  const ref = useRef()
-  useNode(([cx, cy]) => {
-    ref.current.setAttribute('cx', cx)  
-    ref.current.setAttribute('cy', cy)  
-  }, rest) 
-  return <circle ref={ref} cx='0' cy='0' r={radius} fill={color} />
-}
-```
-2. Build a `Link` component using the `useLink` hook.
-```jsx 
-import { useRef } from 'react'
-import { useNode } from 'graphire'
-// Link 
-const Link = (props) => {
-  const { source, target, color = 'black', ...rest } = props
-  const ref = React.useRef()
-
-  useLink(([x1, y1], [x2, y2]) => {
-    ref.current.setAttribute('x1', x1)  
-    ref.current.setAttribute('y1', y1)  
-    ref.current.setAttribute('x2', x2)  
-    ref.current.setAttribute('y2', y2)  
-  }, source, target)
-  return (
-    <line ref={ref} x1='0' y1='0' x2='0' y2='0' stroke={color} strokeWidth={1} />
-  )
-}
-```
-
-3. Use `Node` and `Link` components inside an svg by using the `Graph` wrapper.
 ```jsx
 import { Graph } from 'graphire'
 const MyComponent = (
@@ -79,8 +44,45 @@ const MyComponent = (
 )
 ```
 
+2. Build the `Node` component using the `useNode` hook.
+```jsx 
+import { useRef } from 'react'
+import { useNode } from 'graphire'
+
+const Node = (props) => {
+  const { color='black', radius=5, ...rest } = props
+  const ref = useRef()
+  useNode(([cx, cy]) => {
+    ref.current.setAttribute('cx', cx)  
+    ref.current.setAttribute('cy', cy)  
+  }, rest) 
+  return <circle ref={ref} cx='0' cy='0' r={radius} fill={color} />
+}
+```
+
+3. Build the `Link` component using the `useLink` hook.
+```jsx 
+import { useRef } from 'react'
+import { useNode } from 'graphire'
+// Link 
+const Link = (props) => {
+  const { source, target, color = 'black', ...rest } = props
+  const ref = useRef()
+
+  useLink(([x1, y1], [x2, y2]) => {
+    ref.current.setAttribute('x1', x1)  
+    ref.current.setAttribute('y1', y1)  
+    ref.current.setAttribute('x2', x2)  
+    ref.current.setAttribute('y2', y2)  
+  }, source, target)
+  return (
+    <line ref={ref} x1='0' y1='0' x2='0' y2='0' stroke={color} strokeWidth={1} />
+  )
+}
+```
+
 ## Use with R3F (2D/3D)
-Check out the [sandbox](https://codesandbox.io/s/graphire-forcelayout-example-jet3q) example. 
+Check out the [codesandbox](https://codesandbox.io/s/graphire-forcelayout-example-jet3q) example. 
 
 # Layouts 
 
