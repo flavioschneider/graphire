@@ -7,23 +7,27 @@
 ## Install
 
 ```bash
-npm install --save graphire
+npm install graphire
 ```
 
 ## Usage
 
 ```jsx
-import React, { Component } from 'react'
-
-import MyComponent from 'graphire'
-import 'graphire/dist/index.css'
-
-class Example extends Component {
-  render() {
-    return <MyComponent />
-  }
-}
+import { Graph, useNode, useLink } from 'graphire'
+...
 ```
+
+## TODO:
+Short-term:
+
+Medium-term:
+- [ ] Make node dragging example.
+- [ ] Add new layered layout (e.g. for bipartite graphs / DAGs)
+- [ ] Make many-body simulation more efficient e.g. with fast multipole method.
+- [ ] Improve uids with map for faster deletion and uid updates. 
+
+Long-term:
+
 
 ## License
 

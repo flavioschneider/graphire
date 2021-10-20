@@ -42,3 +42,15 @@ export const obj = {
   // Adds defaults b to a if a is missing them, returns same reference as a.
   default: (a, b) => Object.assign(a, Object.assign(b, a))
 }
+
+export const list = {
+  remove: (list, obj) => {
+    var index = list.indexOf(obj);
+    if (index !== -1) list.splice(index, 1)
+  },
+  removeByIndex: (list, id) => {
+    list.splice(id, 1)
+  }
+}
+
+export const jiggle = () => Math.random()*1e-6

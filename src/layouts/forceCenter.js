@@ -6,9 +6,7 @@ export const ForceCenter = (props) => {
   useForce((graph) => {
     var n = graph.length
     // Find average center vector
-    var sx = 0,
-      sy = 0,
-      sz = 0
+    var sx = 0, sy = 0, sz = 0
     graph.forEach((node) => ((sx += node.x), (sy += node.y), (sz += node.z)))
     sx = (sx / n - x) * strength
     sy = (sy / n - y) * strength

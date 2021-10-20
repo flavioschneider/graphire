@@ -8,6 +8,7 @@ import React, {
 } from 'react'
 import { timer } from 'd3-timer'
 import { useGraph } from '../graph'
+import { is, jiggle } from '../utils' 
 
 const LayoutForceContext = createContext(null)
 
@@ -38,14 +39,13 @@ class LayoutForceState {
   subscribe(graph, params) {
     const { startOnReady = true, onReady } = params
     this.graph = graph
-    this.params = Object.assign(this.params, params)
+    this.params = Object.assign(this.params, { ...params, dim: graph.dim } )
     startOnReady && this.start()
     onReady && onReady(this)
     return () => this.stop()
   }
 
   tick(iterations = 1) {
-    console.log('tick')
     var { alpha, alphaTarget, alphaDecay, velocityDecay } = this.params
     // We can manually tick more than one iteration if needed.
     for (var i = 0; i < iterations; i++) {
@@ -53,7 +53,7 @@ class LayoutForceState {
       this.params.alpha += (alphaTarget - alpha) * alphaDecay
       // Apply all forces on the graph
       for (const uid of Object.keys(this.subscribedForces))
-        this.subscribedForces[uid](this.graph.adjacency, this.params)
+        this.subscribedForces[uid].current(this.graph.adjacency, this.params)
       // Update graph velocities & positions
       this.graph.adjacency.forEach((node, id) => {
         var v = {
@@ -64,16 +64,14 @@ class LayoutForceState {
         this.graph.updateNode(
           id,
           {
-            x: node.x + v.vx,
-            y: node.y + v.vy,
-            z: node.z + v.vz,
+            x: node.x + v.vx || jiggle(),
+            y: node.y + v.vy || jiggle(),
+            z: node.z + v.vz || jiggle(),
             vx: v.vx,
             vy: v.vy,
             vz: v.vz
           },
-          false,
-          false
-        ) // We don't update in-links since all nodes are iterated once.
+        false, false) // We don't update in-links since all nodes are iterated once.
       })
     }
   }
@@ -93,10 +91,14 @@ class LayoutForceState {
 export const LayoutForce = (props) => {
   const { children, ...rest } = props
   const graph = useGraph()
+  const paramsRef = useRef(rest)
   const [state] = useState(() => new LayoutForceState())
 
-  // TODO: rest must be deep checked, rest will always unmount/mount since contains also e.g. dim
-  useLayoutEffect(() => state.subscribe(graph, rest), [state, graph])
+  useLayoutEffect(() => void (
+    !is.dequ(rest, paramsRef.current) &&
+    Object.assign(paramsRef.current, rest)
+  ), [rest])
+  useLayoutEffect(() => state.subscribe(graph, paramsRef.current), [state, graph, paramsRef])
 
   return (
     <LayoutForceContext.Provider value={state}>
@@ -112,9 +114,10 @@ export const useLayoutForce = () => {
 }
 
 let ids = 0
-export const useForce = (callback, params = []) => {
-  const layout = useLayoutForce()
-  const fn = useCallback(callback, params)
+export const useForce = (callback) => {
   const [id] = useState(() => ids++)
-  useLayoutEffect(() => layout.subscribeForce(id, fn), [layout, id, fn])
+  const layout = useLayoutForce()
+  const callbackRef = useRef(callback) 
+  useLayoutEffect(() => void (callbackRef.current = callback), [callback])
+  useLayoutEffect(() => layout.subscribeForce(id, callbackRef), [layout, id, callbackRef])
 }
