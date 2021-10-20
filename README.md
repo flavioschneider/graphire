@@ -85,7 +85,22 @@ Check out the [sandbox](https://codesandbox.io/s/graphire-forcelayout-example-je
 # Layouts 
 
 ## Force Layout 
-TODO -
+The interface for the force layout is inspired from d3-force.
+```jsx
+import { LayoutForce, ForceCenter, ForceDirection, ForceCollide, ForceManyBody, ForceLink } from 'graphire'
+
+<Graph>
+  <LayoutForce onReady={(layout) => } startOnReady={} alphaTarget={} velocityDecay={}>
+    <ForceCenter x={} y={} z={}/> 
+    <ForceDirection x={} y={} z={}/> 
+    <ForceLink distance={} />
+    <ForceCollide radius={} strength={}/>
+    <ForceManyBody strength={} />
+  </LayoutForce>
+
+  {/* ...Nodes and Links here... */ }
+</Graph>
+```
 
 
 ## Goals:
