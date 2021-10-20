@@ -1,6 +1,6 @@
 # graphire
 
-> An unopinionated react graph library.
+> A unopinionated react graph library.
 
 [![NPM](https://img.shields.io/npm/v/graphire.svg)](https://www.npmjs.com/package/graphire) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
