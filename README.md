@@ -21,13 +21,12 @@ yarn add graphire
 # Doc 
 
 ## Use with SVG (2D)
-First build your Link and Node components:
 
+1. Build a `Node` component using the `useNode` hook.
 ```jsx 
-import React, { useState } from 'react'
-import { Graph, useLink, useNode } from 'graphire'
+import { useRef } from 'react'
+import { useNode } from 'graphire'
 
-// Node 
 const Node = (props) => {
   const { color='black', radius=5, ...rest } = props
   const ref = useRef()
@@ -37,7 +36,11 @@ const Node = (props) => {
   }, rest) 
   return <circle ref={ref} cx='0' cy='0' r={radius} fill={color} />
 }
-
+```
+2. Build a `Link` component using the `useLink` hook.
+```jsx 
+import { useRef } from 'react'
+import { useNode } from 'graphire'
 // Link 
 const Link = (props) => {
   const { source, target, color = 'black', ...rest } = props
@@ -53,8 +56,11 @@ const Link = (props) => {
     <line ref={ref} x1='0' y1='0' x2='0' y2='0' stroke={color} strokeWidth={1} />
   )
 }
+```
 
-// Inside the svg component:
+3. Use `Node` and `Link` components inside an svg by using the `Graph` wrapper.
+```jsx
+import { Graph } from 'graphire'
 const MyComponent = (
   return (
     <svg>
