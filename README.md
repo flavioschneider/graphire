@@ -32,7 +32,7 @@ const Node = (props) => {
   const ref = useRef()
   useNode(([cx, cy]) => {
     ref.current.setAttribute('cx', cx)  
-    ref.current.setAttribute('cx', cy)  
+    ref.current.setAttribute('cy', cy)  
   }, rest) 
   return <circle ref={ref} cx='0' cy='0' r={radius} fill={color} />
 }
@@ -91,15 +91,33 @@ import { LayoutForce, ForceCenter, ForceDirection, ForceCollide, ForceManyBody, 
 
 <Graph>
   <LayoutForce onReady={(layout) => } startOnReady={} alphaTarget={} velocityDecay={}>
-    <ForceCenter x={} y={} z={}/> 
-    <ForceDirection x={} y={} z={}/> 
-    <ForceLink distance={} />
-    <ForceCollide radius={} strength={}/>
+    <ForceCenter strength={} x={} y={} z={}/> 
+    <ForceDirection strength={} x={} y={} z={}/> 
+    <ForceLink strength={} distance={} />
+    <ForceCollide strength={} radius={}/>
     <ForceManyBody strength={} />
   </LayoutForce>
 
   {/* ...Nodes and Links here... */ }
 </Graph>
+```
+
+You can build a custom force by using the `useForce` hook that is called at each step of the `LayoutForce` simulation. 
+
+```jsx
+import { useForce } from 'graphire'
+
+export const ForceCustom = (props) => {
+  const { velocityX = 1 } = props
+
+  useForce(graph => {
+    graph.forEach((node) => {
+      // Sets the x-velocity to the provided value on all nodes.
+      node.vx = velocityX 
+    })
+  })
+  return null
+}
 ```
 
 

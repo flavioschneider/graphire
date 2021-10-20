@@ -1,7 +1,7 @@
 import { useForce } from './layoutForce'
 
 export const ForceLink = (props) => {
-  const { strength = 1, distance = 50, x, y, z } = props
+  const { strength = 1, distance = 50 } = props
 
   useForce((graph, { alpha, dim }) => {
 
