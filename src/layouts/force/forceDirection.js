@@ -1,5 +1,5 @@
 import { useForce } from './layoutForce'
-import { is } from '../utils'
+import { is } from '../../utils'
 
 export const ForceDirection = (props) => {
   const { strength = 0.1, x, y, z } = props

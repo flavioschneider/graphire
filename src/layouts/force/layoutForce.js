@@ -7,8 +7,8 @@ import React, {
   useCallback
 } from 'react'
 import { timer } from 'd3-timer'
-import { useGraph } from '../graph'
-import { is, jiggle } from '../utils' 
+import { useGraph } from '../../graph'
+import { is, jiggle } from '../../utils' 
 
 const LayoutForceContext = createContext(null)
 

@@ -1,5 +1,5 @@
 import { useForce } from './layoutForce'
-import { is } from '../utils'
+import { is } from '../../utils'
 
 export const ForceCollide = (props) => {
   const { strength = 1.0, radius = 1.0 } = props

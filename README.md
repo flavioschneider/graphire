@@ -143,6 +143,7 @@ Medium-term:
 - [ ] Make node dragging example.
 - [ ] Add new layered layout (e.g. for bipartite graphs / DAGs)
 - [ ] Improve uids with map for faster deletion and uid updates. 
+- [ ] Convert to typescript. 
 
 Long-term:
 

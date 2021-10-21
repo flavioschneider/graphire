@@ -1,5 +1,5 @@
-import { is } from '../utils'
 import { useForce } from './layoutForce'
+import { is } from '../../utils'
 
 export const ForceManyBody = (props) => {
   const { strength = 1.0 } = props
