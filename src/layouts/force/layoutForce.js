@@ -6,7 +6,7 @@ import React, {
   useContext,
   useCallback
 } from 'react'
-import { timer } from 'd3-timer'
+import { raf } from '@react-spring/rafz'
 import { useGraph } from '../../graph'
 import { is, jiggle } from '../../utils' 
 
@@ -16,8 +16,6 @@ class LayoutForceState {
   constructor() {
     this.graph = null
     this.subscribedForces = {}
-    this.timer = timer(() => {})
-    this.timer.stop()
     this.params = {
       alpha: 1,
       alphaMin: 0.001,
@@ -29,24 +27,36 @@ class LayoutForceState {
 
   start(alpha = 1.0) {
     this.params.alpha = alpha
-    this.timer.restart(this.onTick.bind(this))
+    raf(() => this.tick())
   }
 
-  stop() {
-    this.timer.stop()
+  stop() { this.params.alpha = 0 }
+
+  initNodeParams(node) {
+    node.vx = 0 
+    node.vy = 0
+    node.vz = 0
   }
 
   subscribe(graph, params) {
-    const { startOnReady = true, onReady } = params
+    const { startOnReady = true, onReady, demandFrame = false } = params
+    // Initialize graph for force layout 
     this.graph = graph
-    this.params = Object.assign(this.params, { ...params, dim: graph.dim } )
+    const unsubscribeGraph = graph.subscribeChanges({ onAddNode: (node) => this.initNodeParams(node)})
+    this.graph.adjacency.forEach((node) => this.initNodeParams(node))
+    // Initialize params 
+    this.params = Object.assign(this.params, { ...params, dim: graph.dim })
+    raf.frameLoop = demandFrame ? 'demand' : 'always'
     startOnReady && this.start()
     onReady && onReady(this)
-    return () => this.stop()
+    return () => this.stop() && unsubscribeGraph() 
   }
 
+  frame() { raf.advance() }
+
   tick(iterations = 1) {
-    var { alpha, alphaTarget, alphaDecay, velocityDecay } = this.params
+    var { alpha, alphaMin, alphaTarget, alphaDecay, velocityDecay } = this.params
+    if (alpha < alphaMin) return false 
     // We can manually tick more than one iteration if needed.
     for (var i = 0; i < iterations; i++) {
       // Update alpha
@@ -55,31 +65,15 @@ class LayoutForceState {
       for (const uid of Object.keys(this.subscribedForces))
         this.subscribedForces[uid].current(this.graph.adjacency, this.params)
       // Update graph velocities & positions
-      this.graph.adjacency.forEach((node, id) => {
-        var v = {
-          vx: node.vx * velocityDecay,
-          vy: node.vy * velocityDecay,
-          vz: node.vz * velocityDecay
-        }
-        this.graph.updateNode(
-          id,
-          {
-            x: node.x + v.vx || jiggle(),
-            y: node.y + v.vy || jiggle(),
-            z: node.z + v.vz || jiggle(),
-            vx: v.vx,
-            vy: v.vy,
-            vz: v.vz
-          },
-        false, false) // We don't update in-links since all nodes are iterated once.
+      this.graph.adjacency.forEach((node) => {
+        node.x += (node.vx *= velocityDecay)
+        node.y += (node.vy *= velocityDecay)
+        node.z += (node.vz *= velocityDecay)
+        // We don't update in-links since all nodes are iterated once.
+        this.graph.updateNode(node, {}, false)
       })
     }
-  }
-
-  onTick() {
-    this.tick()
-    const { alpha, alphaMin } = this.params
-    if (alpha < alphaMin) this.stop()
+    return true 
   }
 
   subscribeForce(uid, callback) {
@@ -121,3 +115,4 @@ export const useForce = (callback) => {
   useLayoutEffect(() => void (callbackRef.current = callback), [callback])
   useLayoutEffect(() => layout.subscribeForce(id, callbackRef), [layout, id, callbackRef])
 }
+

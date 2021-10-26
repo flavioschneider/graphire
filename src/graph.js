@@ -5,7 +5,8 @@ import React, {
   useContext,
   createContext
 } from 'react'
-import { is, obj, list } from './utils'
+import { is, list } from './utils'
+import { useUpdatedRef, useObserver } from './hooks'
 
 const GraphContext = createContext(null)
 
@@ -14,36 +15,36 @@ class GraphState {
   constructor(dim = 2) {
     this.dim = dim
     this.adjacency = []
+    this.uids = {}
+    this.subscribers = new Set() 
   }
 
-  getNodeId(uid) {
-    for (var i = 0; i < this.adjacency.length; i++) 
-      if (this.adjacency[i].uid === uid) return i
-    return -1
+  getNodeById(id, useUid=true) {
+    return useUid ? this.uids[id] : this.adjacency[id]
   }
 
-  addNode(callback, params) {
-    // Initialize and add node to adjacency list
-    const node = Object.assign({
+  addNode(callback) {
+    // Initialize node
+    const node = {
       x: 0,
       y: 0,
       z: 0,
-      vx: 0,
-      vy: 0,
-      vz: 0,
       linksTo: [],
       linksFrom: [],
       callback
-    }, params)
-    this.adjacency.push(node)
-    // Update initial position
-    this.notifyNode(node)
+    }
+    // Notify subscribers
+    this.subscribers.forEach(({ onAddNode }) => onAddNode && onAddNode(node))
+    // Add node to adjacency list
+    this.adjacency.push(node) 
     return node
   }
 
   removeNode(node) {
-    // Remove this node from list 
+    // Remove node from adjacency list 
     list.remove(this.adjacency, node)
+    // Remove node from uids object if present 
+    !is.und(node.uid) && (delete this.uids[node.uid]) 
     // Remove parent links 
     node.linksFrom.forEach((linkFrom) => {
       linkFrom.node.linksTo = linkFrom.node.linksTo.filter(linkTo => linkTo.node !== node)
@@ -54,11 +55,14 @@ class GraphState {
     })
   }
 
-  updateNode(id, params = {}, useUid = false, updateInLinks = true) {
-    if (useUid) id = this.getNodeId(id)
-    const node = this.adjacency[id]
-    // Update params
+  updateNode(node, params = {}, updateInLinks = true) {
     Object.assign(node, params)
+    // Add/update uids if uid present 
+    !is.und(node.uid) && (this.uids[node.uid] = node) // TODO: delete if changed 
+    // Set fixed position if present 
+    node.fx && (node.x = node.fx)
+    node.fy && (node.y = node.fy)
+    node.fz && (node.z = node.fz)
     // Update node position
     this.notifyNode(node)
     // Update attached links position
@@ -72,50 +76,61 @@ class GraphState {
     })
   }
 
-  subscribeNode(callback, params) {
-    const node = this.addNode(callback, params)
-    return () => this.removeNode(node)
-  }
-
   notifyNode(node) {
     node.callback.current([node.x, node.y, node.z], node)
   }
 
-  isLinkValid(sid, tid) {
-    const len = this.adjacency.length
-    return !is.und(sid) && !is.und(tid) && !is.und(this.adjacency[sid]) && !is.und(this.adjacency[tid])
+  isLinkValid(source, target) {
+    return !is.und(source) && !is.und(target)
   }
 
-  addLink(callback, sid, tid, params, useUid = false) {
-    if (useUid) sid = this.getNodeId(sid), tid = this.getNodeId(tid)
-    if (!this.isLinkValid(sid, tid)) return console.warn('You are trying to add a link to unexisting nodes', sid, tid)
-    const source = this.adjacency[sid]
-    const target = this.adjacency[tid]
+  addLinkById(callback, sid, tid, params, useUid = false) {
+    const source = this.getNodeById(sid, useUid)
+    const target = this.getNodeById(tid, useUid)
+    if (!this.isLinkValid(source, target)) return console.warn('You are trying to add a link to unexisting nodes', sid, tid)
+    return this.addLink(callback, source, target, params)
+  }
+
+  addLink(callback, source, target) {
     // Add source link
-    const linkTo = obj.default(params, { node: target, callback })
+    const linkTo = { node: target, callback }
     source.linksTo.push(linkTo)
     // Add target link
     const linkFrom = { node: source, callback }
     target.linksFrom.push(linkFrom)
     // Update initial position
     this.notifyLink(linkTo, source, target)
-    return [linkTo, linkFrom]
+    return { to: linkTo, from: linkFrom }
   }
 
-  removeLink(sid, tid, linkTo, linkFrom, useUid = false) {
-    if (useUid) sid = this.getNodeId(sid), tid = this.getNodeId(tid)
-    if (!this.isLinkValid(sid, tid)) return // Can happen e.g. if link already removed by node removal 
-    list.remove(this.adjacency[sid].linksTo, linkTo)
-    list.remove(this.adjacency[sid].linksFrom, linkFrom)   
+  removeLinkById(sid, tid, linkTo, linkFrom, useUid = false) {
+    const source = this.getNodeById(sid, useUid)
+    const target = this.getNodeById(tid, useUid)
+    if (!this.isLinkValid(source, target)) return 
+    this.removeLink(source, target, linkTo, linkFrom)
   }
 
-  subscribeLink(callback, sid, tid, params) {
-    const [linkTo, linkFrom] = this.addLink(callback, sid, tid, params, true)
-    return () => this.removeLink(sid, tid, linkTo, linkFrom, true)
+  removeLink(source, target, linkTo, linkFrom) {
+    list.remove(source.linksTo, linkTo)
+    list.remove(target.linksFrom, linkFrom)   
+  }
+
+  updateLink(to, from, params) {
+    Object.assign(to, params)
   }
 
   notifyLink(link, source, target) {
-    link.callback.current([source.x, source.y, source.z], [target.x, target.y, target.z], source, target)
+    link.callback.current(
+      [source.x, source.y, source.z], 
+      [target.x, target.y, target.z], 
+      source, 
+      target
+    )
+  }
+
+  subscribeChanges(callbacks) {
+    this.subscribers.add(callbacks)
+    return () => this.subscribers.delete(callbacks)
   }
 
   log() {
@@ -141,38 +156,61 @@ export const useGraph = () => {
   return graph
 }
 
-export const useNode = (callback, params) => {
-  const graph = useGraph()
-  const callbackRef = useRef(callback)
-  const paramsRef = useRef(params)
-  useLayoutEffect(() => void (callbackRef.current = callback), [callback])
+export const useNode = (callback, params={}) => {
+  const graph = useGraph() 
+  const nodeRef = useRef() 
+  const callbackRef = useUpdatedRef(callback)
+
+  // Subscribe node 
   useLayoutEffect(() => {
-    if (!is.dequ(params, paramsRef.current)) {
-      graph.updateNode(params.uid, params, true)
-      paramsRef.current = params
-    }
-  }, [graph, params])
-  useLayoutEffect(
-    () => graph.subscribeNode(callbackRef, paramsRef.current),
-    [graph, callbackRef, paramsRef]
-  )
+    const node = graph.addNode(callbackRef)
+    nodeRef.current = node
+    return () => graph.removeNode(node)
+  }, [graph, callbackRef, nodeRef])
+  
+  // Deep observe params changes 
+  useObserver((change) => {
+    graph.updateNode(nodeRef.current, change, true)
+  }, params)
+
+  // Return API for fast (transient) changes e.g. x,y,z.
+  const api = {
+    set: (change) => graph.updateNode(nodeRef.current, change, true),
+    get: () => nodeRef.current 
+  }
+
+  return api 
 }
 
-export const useLink = (callback, source, target, params) => {
+
+export const useLink = (callback, source, target, params={}) => {
   const graph = useGraph()
-  const callbackRef = useRef(callback)
-  const paramsRef = useRef(params)
-  useLayoutEffect(() => void (callbackRef.current = callback), [callback])
-  useLayoutEffect(() =>
-    void (
-      !is.dequ(params, paramsRef.current) &&
-      Object.assign(paramsRef.current, params)
-    ),
-  [params])
-  useLayoutEffect(
-    () => graph.subscribeLink(callbackRef, source, target, paramsRef.current),
-    [graph, callbackRef, paramsRef, source, target]
-  )
+  const linkRef = useRef() 
+  const callbackRef = useUpdatedRef(callback)
+
+  // Subscribe link 
+  useLayoutEffect(() => {
+    const { to, from } = graph.addLinkById(callbackRef, source, target, true)
+    linkRef.current = { to, from }
+    return () => graph.removeLinkById(source, target, to, from, true)
+  }, [graph, callbackRef, source, target])
+
+  // Deep observe params changes 
+  useObserver((change) => {
+    const { to, from } = linkRef.current 
+    graph.updateLink(to, from, change) 
+  }, params)
+
+  // Return API for fast (transient) changes e.g. distance.
+  const api = {
+    set: (change) => {
+      const { to, from } = linkRef.current 
+      graph.updateLink(to, from, change) 
+    },
+    get: () => linkRef.current
+  }
+
+  return api 
 }
 
 export const Graph = (props) => {

@@ -95,6 +95,9 @@ Bubble SVG example [codesandbox](https://codesandbox.io/s/graphire-svg-bubble-ex
 ## Use with R3F (2D/3D)
 Check out the [codesandbox](https://codesandbox.io/s/graphire-forcelayout-example-jet3q) example. 
 
+# Hooks 
+
+
 # Layouts 
 
 ## Force Layout 
@@ -133,20 +136,35 @@ export const ForceCustom = (props) => {
 }
 ```
 
+## Layered Layout 
+
+_Coming soon:_
+
+```jsx
+<LayeredLayout 
+  dim={2}
+  gap={[x,y,z]}
+  anchor={[x,y,z]}
+  orientation={"horizontal" | "vertical"}
+  direction={"ltr" | "rtl"}
+  onResize={(e) => {}}
+  />
+```
+
 
 ## Goals:
 Short-term: 
-- [ ] Overlapping nodes have no repulsion collision/manyBody. 
+- [x] Overlapping nodes have no repulsion collision/manyBody. 
 
 Medium-term:
 - [ ] Make many-body simulation more efficient e.g. with fast multipole method.
-- [ ] Make node dragging example.
-- [ ] Add new layered layout (e.g. for bipartite graphs / DAGs)
-- [ ] Improve uids with map for faster deletion and uid updates. 
+- [x] Make node dragging example.
+- [ ] Add new layout layered (e.g. for bipartite graphs / DAGs)
+- [x] Improve uids with map for faster deletion and uid updates. 
 - [ ] Convert to typescript. 
 
 Long-term:
-
+- [ ] Layout circular  
 
 ## License
 
