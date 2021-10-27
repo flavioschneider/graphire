@@ -7,12 +7,12 @@ export const ForceCollide = (props) => {
   useForce((graph, { dim }) => {
     // N-body Newton O(n^2) (most inefficient): https://en.wikipedia.org/wiki/N-body_problem
     graph.forEach((source) => {
-      var rs = source.radius ?? radius 
+      var rs = !is.und(source.radius) ? source.radius : radius 
       
       graph.forEach((target) => {
         if (is.equ(source, target)) return
 
-        var rt = target.radius ?? radius 
+        var rt = !is.und(target.radius) ? target.radius : radius 
         var dist = rt + rs // Minimum distance to collision
 
         var x = target.x + target.vx - source.x - source.vx

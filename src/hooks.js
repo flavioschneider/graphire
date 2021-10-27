@@ -12,7 +12,7 @@ export const useObserver = (callback, params) => {
   
   useLayoutEffect(() => {
     const prev = paramsRef.current 
-    if (!is.dequ(prev, params)) { // TODO: compare properly.
+    if (!is.dequ(prev, params)) {
       callback(params)
       paramsRef.current = params 
     }

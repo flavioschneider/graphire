@@ -43,13 +43,16 @@ export const obj = {
   default: (a, b) => Object.assign(a, Object.assign(b, a))
 }
 
-export const list = {
-  remove: (list, obj) => {
-    var index = list.indexOf(obj);
-    if (index !== -1) list.splice(index, 1)
+export const arr = {
+  remove: (arr, obj) => {
+    var index = arr.indexOf(obj);
+    if (index !== -1) arr.splice(index, 1)
   },
-  removeByIndex: (list, id) => {
-    list.splice(id, 1)
+  removeByIndex: (arr, id) => {
+    arr.splice(id, 1)
+  },
+  init2D: (r, c, value = 0) => {
+    return Array(r).fill().map(() => Array(c).fill(value))
   }
 }
 

@@ -154,13 +154,11 @@ _Coming soon:_
 
 ## Goals:
 Short-term: 
-- [x] Overlapping nodes have no repulsion collision/manyBody. 
+- [ ] 
 
 Medium-term:
 - [ ] Make many-body simulation more efficient e.g. with fast multipole method.
-- [x] Make node dragging example.
 - [ ] Add new layout layered (e.g. for bipartite graphs / DAGs)
-- [x] Improve uids with map for faster deletion and uid updates. 
 - [ ] Convert to typescript. 
 
 Long-term:
