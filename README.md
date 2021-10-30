@@ -158,8 +158,7 @@ Short-term:
 
 Medium-term:
 - [ ] Make many-body simulation more efficient e.g. with fast multipole method.
-- [ ] Add new layout layered (e.g. for bipartite graphs / DAGs)
-- [ ] Convert to typescript. 
+- [ ] Convert to typescript (50% done)
 
 Long-term:
 - [ ] Layout circular  

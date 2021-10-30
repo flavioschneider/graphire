@@ -147,10 +147,10 @@ class GraphState {
     return !is.und(source) && !is.und(target)
   }
 
-  addLinkById(callback: RefCallbackLink, sid: UID, tid: UID, useUid = false) : LinkPair {
+  addLinkById(callback: RefCallbackLink, sid: UID, tid: UID, useUid = false) : LinkPair { 
     const source = this.getNodeById(sid, useUid)
     const target = this.getNodeById(tid, useUid)
-    if (!this.isLinkValid(source, target)) throw `You are trying to add a link to unexisting nodes: [${source}]->[${target}]`
+    if (!this.isLinkValid(source, target)) throw `You are trying to add a link to unexisting nodes: [${sid}]->[${tid}]`
     return this.addLink(callback, source, target)
   }
 
@@ -207,14 +207,15 @@ class GraphState {
   }
 
   logNode(node: Node) {
-    const to: UID[] = [], from: UID[] = []
+    const to: any [] = [], from: any[] = []
     node.linksTo.forEach((link) => {
-      to.push(link.node.uid || 'Noid')
+      to.push(is.und(link.node.uid) ? 'Noid' : link.node.uid )
     })
     node.linksFrom.forEach((link) => {
-      from.push(link.node.uid || 'Noid')
-    })
-    console.log(node.uid+': (to->):['+to+'], (from<-):['+from+']\n')
+      from.push(is.und(link.node.uid) ? 'Noid' : link.node.uid)
+    }) 
+    const id = is.und(node.uid) ? 'Noid' : node.uid
+    console.log(id +': (to->):['+to+'], (from<-):['+from+']\n')
   }
 }
 
@@ -237,7 +238,7 @@ export const useNode = (callback: CallbackNode, params: ParamsNode = {}) => {
   }, [graph, callbackRef, nodeRef])
   
   // Deep observe params changes 
-  useObserver((change: ParamsNode) => {
+  useObserver((change: ParamsNode) => { 
     const node = nodeRef.current
     node && graph.updateNode(node, change, true)
   }, params)

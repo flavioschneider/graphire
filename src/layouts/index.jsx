@@ -4,6 +4,6 @@ export * from './force/forceDirection'
 export * from './force/forceManyBody'
 export * from './force/forceLink'
 export * from './force/forceCollide'
-export * from './force/forceFMM'
+//export * from './force/experimental/forceFMM'
 
 export * from './layer/layoutLayer'

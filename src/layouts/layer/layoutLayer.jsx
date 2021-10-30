@@ -32,7 +32,9 @@ class LayoutLayerState {
     const graph = this.graph.adjacency 
     const startNodes = graph.filter(node => node.linksFrom.length == 0)
     let numLayers = 0
-    
+    // Reset
+    graph.forEach(node => node.layer = undefined)
+
     // Compute layers (assuming graph is DAG)
     function DFS(node, layer) {
       numLayers = Math.max(layer+1, numLayers)
@@ -63,10 +65,10 @@ class LayoutLayerState {
     this.graph = graph 
     this.updateLayout() 
     return graph.subscribeChanges({ 
-      onAddNode: () => this.updateLayout(),
-      onRemoveNode: () => this.updateLayout(),
-      onAddLink: () => this.updateLayout(),
-      onRemoveLink: () => this.updateLayout() 
+      onAddNode: () => { this.updateLayout() },
+      onRemoveNode: () => { this.updateLayout()  },
+      onAddLink: () => { this.updateLayout()  },
+      onRemoveLink: () => { this.updateLayout() }
     })
   }
 }
