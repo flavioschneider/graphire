@@ -1,22 +1,26 @@
-# graphire
 
-[![NPM](https://img.shields.io/npm/v/graphire.svg)](https://www.npmjs.com/package/graphire) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+<img src="markdown/logo.png">
 
+[![NPM](https://img.shields.io/npm/v/graphire?style=flat&colorA=0f0f0f&colorB=0f0f0f)](https://www.npmjs.com/package/graphire) 
+[![Downloads](https://img.shields.io/npm/dt/graphire?style=flat&colorA=0f0f0f&colorB=0f0f0f)](https://npmjs.com/package/@react-three/fiber)
 
-<a href="https://codesandbox.io/s/graphire-forcelayout-example-jet3q"><img src="markdown/preview.png"></a>
-
-> A fully declarative unopinionated react graph library.
-
-
-# Install
 
 ```bash
 npm install graphire
 ```
-or
-```bash
-yarn add graphire
-```
+
+### What is it?
+Graphire is a declarative and unopinionated react graph library for React. It supports different layouts to visualize large dynamic networks of nodes and links. 
+
+### How does it work?
+Internally it stores the graph using a bidirectional adjacency list that allows fast insertion, deletion, and iteration. It then exposes a `Graph` wrapper and two essential hooks: `useNode` and `useLink`. Those will help you to update the node and links position in an unopinionated way. 
+
+### Unopinionated?
+It means that you can choose nodes and links to be anything you like: a `<circle>`/`<line>` (SVGs), `<div>`, `<canvas>`, `<mesh>`/instanced mesh (ThreeJS with R3F). The exposed hooks will only care for positioning. It will be up to you to decide how to display and style the nodes and links. 
+
+### Why?
+Some graph/network visualization libraries like D3.js are not made to work with React, hence uncomfortable to use. Other libraries are made for React but do not decouple styling from positioning, making it hard to customize. Graphire solves that. And it's _fast_.
+
 
 # Doc 
 
@@ -95,6 +99,8 @@ Bubble SVG example [codesandbox](https://codesandbox.io/s/graphire-svg-bubble-ex
 ## Use with R3F (2D/3D)
 Check out the [codesandbox](https://codesandbox.io/s/graphire-forcelayout-example-jet3q) example. 
 
+<a href="https://codesandbox.io/s/graphire-forcelayout-example-jet3q"><img src="markdown/preview.png"></a>
+
 # Hooks 
 
 
@@ -157,7 +163,6 @@ Short-term:
 - [ ] 
 
 Medium-term:
-- [ ] Make many-body simulation more efficient e.g. with fast multipole method.
 - [ ] Convert to typescript (50% done)
 
 Long-term:
