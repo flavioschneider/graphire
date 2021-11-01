@@ -19,6 +19,7 @@ class LayoutForceState {
     this.subscribedForces = {}
     this.params = {
       onReady: null,
+      dim: null, 
       autoStart: true, 
       alpha: 1,
       alphaMin: 0.001,
@@ -56,8 +57,10 @@ class LayoutForceState {
   subscribeGraph(graph) {
     this.graph = graph
     this.graph.adjacency.forEach((node) => this.initNodeParams(node))
+    this.params.dim = graph.params.dim
     return graph.subscribeChanges({ 
-      onAddNode: (node) => this.initNodeParams(node)
+      onBeforeAddNode: (node) => this.initNodeParams(node),
+      onParamsChange: ({ dim }) => this.params.dim = dim 
     })
   }
 
@@ -70,14 +73,14 @@ class LayoutForceState {
       this.params.alpha += (alphaTarget - alpha) * alphaDecay
       // Apply all forces on the graph
       for (const uid of Object.keys(this.subscribedForces))
-        this.subscribedForces[uid].current(this.graph.adjacency, { ...this.params, dim: this.graph.params.dim })
+        this.subscribedForces[uid].current(this.graph.adjacency, this.params)
       // Update graph velocities & positions
-      this.graph.adjacency.forEach((node) => {
+      this.graph.adjacency.forEach((node, id) => {
         node.x += (node.vx *= velocityDecay)
         node.y += (node.vy *= velocityDecay)
         node.z += (node.vz *= velocityDecay)
         // We don't update in-links since all nodes are iterated once.
-        this.graph.updateNode(node, {}, false)
+        this.graph.updateNode(node, null, false)
       })
     }
     return true 

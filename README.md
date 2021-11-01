@@ -10,7 +10,7 @@ npm install graphire
 ```
 
 ### What is it?
-Graphire is a declarative and unopinionated graph library for React. It supports different layouts to visualize large dynamic networks of nodes and links. 
+Graphire is a declarative and unopinionated graph visualization library for React. It supports different layouts to visualize large dynamic networks of nodes and links in both 2D and 3D. 
 
 ### How does it work?
 Internally it stores the graph using a bidirectional adjacency list that allows fast insertion, deletion, and iteration. It then exposes a `Graph` wrapper and two essential hooks: `useNode` and `useLink`. Those will help you to update the node and links position in an unopinionated way. 

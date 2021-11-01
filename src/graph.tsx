@@ -42,10 +42,12 @@ interface LinkPair {
   from: Link
 }
 interface Subscriber {
-  onAddNode: (node: Node) => void
+  onAddNode: (node: Node) => void 
+  onBeforeAddNode: (node: Node) => void 
   onRemoveNode: (node: Node) => void 
   onAddLink: (source: Link, target: Link) => void 
   onRemoveLink: (source: Link, target: Link) => void 
+  onParamsChange: (params: ParamsGraph) => void 
 }
 type Unsusbscribe = () => void
 interface ParamsGraph {
@@ -78,6 +80,7 @@ class GraphState {
 
   updateParams(params: ParamsGraph) {
     Object.assign(this.params, params)
+    this.subscribers.forEach(({ onParamsChange }) => onParamsChange && onParamsChange(this.params))
   }
 
   getNodeById(id: UID, useUid: boolean = true) {
@@ -94,6 +97,8 @@ class GraphState {
       linksFrom: [],
       callback
     }
+    // Notify subscribers
+    this.subscribers.forEach(({ onBeforeAddNode }) => onBeforeAddNode && onBeforeAddNode(node))
     // Add node to adjacency list
     this.adjacency.push(node) 
     // Notify subscribers
@@ -132,11 +137,12 @@ class GraphState {
     // Links from this node to other nodes
     node.linksTo.forEach((link) => {
       this.notifyLink(link, node, link.node)
+      //return 
     })
     // Links from other nodes to this node
-    updateInLinks && node.linksFrom.forEach((link) => {
+    /*updateInLinks && node.linksFrom.forEach((link) => {
       this.notifyLink(link, link.node, node)
-    })
+    })*/
   }
 
   notifyNode(node: Node) {
