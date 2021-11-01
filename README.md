@@ -2,7 +2,7 @@
 <img src="markdown/logo.png">
 
 [![NPM](https://img.shields.io/npm/v/graphire?style=flat&colorA=0f0f0f&colorB=0f0f0f)](https://www.npmjs.com/package/graphire) 
-[![Downloads](https://img.shields.io/npm/dt/graphire?style=flat&colorA=0f0f0f&colorB=0f0f0f)](https://npmjs.com/package/@react-three/fiber)
+[![Downloads](https://img.shields.io/npm/dt/graphire?style=flat&colorA=0f0f0f&colorB=0f0f0f)](https://www.npmjs.com/package/graphire)
 
 
 ```bash
@@ -10,7 +10,7 @@ npm install graphire
 ```
 
 ### What is it?
-Graphire is a declarative and unopinionated react graph library for React. It supports different layouts to visualize large dynamic networks of nodes and links. 
+Graphire is a declarative and unopinionated graph library for React. It supports different layouts to visualize large dynamic networks of nodes and links. 
 
 ### How does it work?
 Internally it stores the graph using a bidirectional adjacency list that allows fast insertion, deletion, and iteration. It then exposes a `Graph` wrapper and two essential hooks: `useNode` and `useLink`. Those will help you to update the node and links position in an unopinionated way. 
@@ -23,7 +23,7 @@ Some graph/network visualization libraries like D3.js are not made to work with 
 
 
 # Doc 
-
+> Work in progress...
 ## Use with SVG (2D)
 
 1. Use `Node` and `Link`components  (defined in step 2 and 3) inside an svg by using the `Graph` wrapper.
