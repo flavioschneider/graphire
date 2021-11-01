@@ -22,9 +22,34 @@ It means that you can choose nodes and links to be anything you like: a `<circle
 Some graph/network visualization libraries like D3.js are not made to work with React, hence uncomfortable to use. Other libraries are made for React but do not decouple styling from positioning, making it hard to customize. Graphire solves that. And it's _fast_.
 
 
-# Doc 
-> Work in progress...
-## Use with SVG (2D)
+# [Documentation](https://github.com/flavioschneider/graphire/wiki) 
+
+# Examples 
+
+<table>
+  <tr>
+    <td> 
+      <a href="https://codesandbox.io/s/graphire-svg-simple-graph-example-eftpc?file=/src/App.js:184-633"><img src="markdown/svg-example.png"></a>
+      Simple example using SVGs without any layout.
+    </td>
+    <td>
+      <a href="https://codesandbox.io/s/graphire-svg-bubble-example-e33ss"><img src="markdown/svg-bubble-example.png"></a>
+      Bubble example using SVGs with force layout.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <a href="https://codesandbox.io/s/graphire-forcelayout-example-jet3q"><img src="markdown/preview.png"></a>
+      Graph example in 3D with react-three-fiber (Three.js) using very efficient node instancing and segments. 
+    </td>
+    <td>
+      <a href="https://codesandbox.io/s/graphire-forcelayout-example-jet3q"><img src="markdown/preview.png"></a>
+      Graph example in 3D with react-three-fiber (Three.js) using very efficient node instancing and segments. 
+    </td>
+  </tr>
+</table>
+
+# Basic Usage:
 
 1. Use `Node` and `Link`components  (defined in step 2 and 3) inside an svg by using the `Graph` wrapper.
 
@@ -87,75 +112,9 @@ const Link = (props) => {
 }
 ```
 
-Simple SVG example [codesandbox](https://codesandbox.io/s/graphire-svg-simple-graph-example-eftpc?file=/src/App.js:184-633) 
-
-<a href="https://codesandbox.io/s/graphire-svg-simple-graph-example-eftpc?file=/src/App.js:184-633"><img src="markdown/svg-example.png"></a>
-
-Bubble SVG example [codesandbox](https://codesandbox.io/s/graphire-svg-bubble-example-e33ss)
-
-<a href="https://codesandbox.io/s/graphire-svg-bubble-example-e33ss"><img src="markdown/svg-bubble-example.png"></a>
 
 
-## Use with R3F (2D/3D)
-Check out the [codesandbox](https://codesandbox.io/s/graphire-forcelayout-example-jet3q) example. 
 
-<a href="https://codesandbox.io/s/graphire-forcelayout-example-jet3q"><img src="markdown/preview.png"></a>
-
-# Hooks 
-
-
-# Layouts 
-
-## Force Layout 
-The interface for the force layout is inspired from d3-force.
-```jsx
-import { LayoutForce, ForceCenter, ForceDirection, ForceCollide, ForceManyBody, ForceLink } from 'graphire'
-
-<Graph>
-  <LayoutForce onReady={(layout) => } startOnReady={} alphaTarget={} velocityDecay={}>
-    <ForceCenter strength={} x={} y={} z={}/> 
-    <ForceDirection strength={} x={} y={} z={}/> 
-    <ForceLink strength={} distance={} />
-    <ForceCollide strength={} radius={}/>
-    <ForceManyBody strength={} />
-  </LayoutForce>
-
-  {/* ...Nodes and Links here... */ }
-</Graph>
-```
-
-You can build a custom force by using the `useForce` hook that is called at each step of the `LayoutForce` simulation. 
-
-```jsx
-import { useForce } from 'graphire'
-
-export const ForceCustom = (props) => {
-  const { velocityX = 1 } = props
-
-  useForce(graph => {
-    graph.forEach((node) => {
-      // Sets the x-velocity to the provided value on all nodes.
-      node.vx = velocityX 
-    })
-  })
-  return null
-}
-```
-
-## Layered Layout 
-
-_Coming soon:_
-
-```jsx
-<LayeredLayout 
-  dim={2}
-  gap={[x,y,z]}
-  anchor={[x,y,z]}
-  orientation={"horizontal" | "vertical"}
-  direction={"ltr" | "rtl"}
-  onResize={(e) => {}}
-  />
-```
 
 
 ## Goals:
@@ -167,7 +126,3 @@ Medium-term:
 
 Long-term:
 - [ ] Layout circular  
-
-## License
-
-MIT © [flavioschneider](https://github.com/flavioschneider)
