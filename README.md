@@ -1,9 +1,9 @@
 
 <img src="markdown/logo.png">
-
+ 
 [![NPM](https://img.shields.io/npm/v/graphire?style=flat&colorA=0f0f0f&colorB=0f0f0f)](https://www.npmjs.com/package/graphire) 
+[![NPM](https://img.shields.io/bundlephobia/minzip/graphire?label=minzip&style=flat&colorA=0f0f0f&colorB=0f0f0f)](https://www.npmjs.com/package/graphire)
 [![Downloads](https://img.shields.io/npm/dt/graphire?style=flat&colorA=0f0f0f&colorB=0f0f0f)](https://www.npmjs.com/package/graphire)
-
 
 ```bash
 npm install graphire
@@ -119,7 +119,7 @@ const Link = (props) => {
 
 ## Goals:
 Short-term: 
-- [ ] 
+- [ ] -
 
 Medium-term:
 - [ ] Convert to typescript (50% done)
