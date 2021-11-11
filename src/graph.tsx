@@ -1,4 +1,5 @@
-import React, {
+import * as React from 'react'
+import {
   useState,
   useLayoutEffect,
   useRef,
@@ -84,7 +85,7 @@ class GraphState {
   }
 
   getNodeById(id: UID, useUid: boolean = true) {
-    return useUid ? this.uids[id] : this.adjacency[id]
+    return useUid ? this.uids[id] : this.adjacency[id as number]
   }
 
   addNode(callback: RefCallbackNode): Node {
@@ -149,7 +150,7 @@ class GraphState {
     node.callback.current!([node.x, node.y, node.z], node)
   }
 
-  isLinkValid(source: Link, target: Link) {
+  isLinkValid(source: Node, target: Node) {
     return !is.und(source) && !is.und(target)
   }
 

@@ -1,8 +1,8 @@
 import { useCallback, useRef } from 'react'
 import { useForce } from './layoutForce'
 import { useGraph } from '../..'
-import { is, jiggle } from '../../utils'
-import { useLayoutEffect, useMemo } from 'react'
+import { is } from '../../utils'
+import { useLayoutEffect } from 'react'
 
 export const ForceManyBody = (props) => {
   const { 

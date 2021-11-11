@@ -1,6 +1,6 @@
 {
   "name": "graphire",
-  "version": "0.0.0-beta.7",
+  "version": "0.0.0-beta.9",
   "description": "A unopinionated react graph library.",
   "keywords": [
     "react",
@@ -12,35 +12,31 @@
   "license": "MIT",
   "repository": "flavioschneider/graphire",
   "homepage": "https://github.com/flavioschneider/graphire",
-  "main": "index.cjs.js",
-  "module": "index.js",
-  "types": "index.d.ts",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "sideEffects": false,
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ],
-    "rules": {
-      "body-max-line-length": [
-        0
-      ]
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
     }
   },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix"
+    ]
+  },
   "scripts": {
-    "prebuild": "rimraf dist && npm run typegen",
-    "build": "rollup -c && npm run copy",
-    "prepare": "npm run build && husky install",
-    "eslint": "eslint --fix {src,.storybook}/**/*.{ts,tsx}",
-    "eslint:ci": "eslint {src,.storybook}/**/*.{ts,tsx}",
+    "build": "rollup -c",
+    "postbuild": "tsc --emitDeclarationOnly",
+    "prepublishOnly": "npm run build",
     "test": "echo no tests yet",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false --strict --jsx react",
-    "typegen": "tsc --emitDeclarationOnly",
     "storybook": "start-storybook  -s ./.storybook/public -p 6006",
-    "build-storybook": "build-storybook -s ./.storybook/public",
-    "copy": "copyfiles package.json readme.md LICENSE dist && json -I -f dist/package.json -e \"this.private=false; this.devDependencies=undefined; this.optionalDependencies=undefined; this.scripts=undefined; this.husky=undefined; this.prettier=undefined; this.jest=undefined; this['lint-staged']=undefined;\""
+    "build-storybook": "build-storybook -s ./.storybook/public"
   },
   "dependencies": {
-    "@react-spring/rafz": "^9.3.0"
+    "@react-spring/rafz": "^9.3.0",
+    "caniuse-lite": "^1.0.30001279"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",

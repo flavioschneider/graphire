@@ -1,16 +1,12 @@
 import path from 'path'
 import babel from '@rollup/plugin-babel'
 import resolve from '@rollup/plugin-node-resolve'
-import json from '@rollup/plugin-json'
-import glslify from 'rollup-plugin-glslify'
-import multiInput from 'rollup-plugin-multi-input'
-import { terser } from 'rollup-plugin-terser'
 
 const root = process.platform === 'win32' ? path.resolve('/') : '/'
 const external = (id) => !id.startsWith('.') && !id.startsWith(root)
 const extensions = ['.js', '.jsx', '.ts', '.tsx', '.json']
 
-const getBabelOptions = ({ useESModules }, targets) => ({
+const getBabelOptions = ({ useESModules }) => ({
   babelrc: false,
   extensions,
   exclude: '**/node_modules/**',
@@ -34,56 +30,23 @@ const getBabelOptions = ({ useESModules }, targets) => ({
     '@babel/preset-react',
     '@babel/preset-typescript',
   ],
-  plugins: [
-    '@babel/plugin-proposal-nullish-coalescing-operator',
-    ['@babel/transform-runtime', { regenerator: false, useESModules }],
-  ],
+  plugins: [['@babel/transform-runtime', { regenerator: false, useESModules }]],
 })
 
 export default [
   {
-    input: ['src/**/*.ts', 'src/**/*.tsx', '!src/index.ts'],
-    output: { dir: `dist`, format: 'esm' },
-    external,
-    plugins: [
-      multiInput(),
-      json(),
-      glslify(),
-      babel(getBabelOptions({ useESModules: true }, '>1%, not dead, not ie 11, not op_mini all')),
-      resolve({ extensions }),
-    ],
-  },
-  {
     input: `./src/index.ts`,
-    output: { dir: `dist`, format: 'esm' },
+    output: { file: `dist/index.js`, format: 'esm' },
     external,
     plugins: [
-      json(),
-      glslify(),
-      babel(getBabelOptions({ useESModules: true }, '>1%, not dead, not ie 11, not op_mini all')),
+      babel(getBabelOptions({ useESModules: true })),
       resolve({ extensions }),
-    ],
-    preserveModules: true,
-  },
-  {
-    input: ['src/**/*.ts', 'src/**/*.tsx', '!src/index.ts'],
-    output: { dir: `dist`, format: 'cjs' },
-    external,
-    plugins: [
-      multiInput({
-        transformOutputPath: (output) => output.replace(/\.[^/.]+$/, '.cjs.js'),
-      }),
-      json(),
-      glslify(),
-      babel(getBabelOptions({ useESModules: false })),
-      resolve({ extensions }),
-      terser(),
     ],
   },
   {
     input: `./src/index.ts`,
     output: { file: `dist/index.cjs.js`, format: 'cjs' },
     external,
-    plugins: [json(), glslify(), babel(getBabelOptions({ useESModules: false })), resolve({ extensions }), terser()],
+    plugins: [babel(getBabelOptions({ useESModules: false })), resolve({ extensions })],
   },
 ]
