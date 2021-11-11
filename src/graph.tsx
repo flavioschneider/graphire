@@ -140,9 +140,9 @@ class GraphState {
       //return 
     })
     // Links from other nodes to this node
-    /*updateInLinks && node.linksFrom.forEach((link) => {
+    updateInLinks && node.linksFrom.forEach((link) => {
       this.notifyLink(link, link.node, node)
-    })*/
+    })
   }
 
   notifyNode(node: Node) {
