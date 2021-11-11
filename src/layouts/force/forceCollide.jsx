@@ -43,15 +43,3 @@ export const ForceCollide = (props) => {
 
   return null
 }
-
-
-```jsx
-<LayeredLayout 
-  dim={2}
-  gap={[x,y,z]}
-  anchor={[x,y,z]}
-  orientation={"horizontal" | "vertical"}
-  direction={"ltr" | "rtl"}
-  onResize={(e) => {}}
-  />
-```

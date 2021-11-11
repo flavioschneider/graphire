@@ -1,6 +1,6 @@
 {
   "name": "graphire",
-  "version": "0.0.0-beta.9",
+  "version": "0.0.0-beta.11",
   "description": "A unopinionated react graph library.",
   "keywords": [
     "react",
@@ -79,6 +79,7 @@
     "eslint-plugin-react": "^7.20.6",
     "eslint-plugin-react-hooks": "^4.1.0",
     "glslify-loader": "^2.0.0",
+    "graphire": "^0.0.0-beta.10",
     "husky": "^6.0.0",
     "jest": "^26.4.1",
     "json": "^11.0.0",

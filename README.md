@@ -43,8 +43,8 @@ Some graph/network visualization libraries like D3.js are not made to work with 
       Graph example in 3D with react-three-fiber (Three.js) using very efficient node instancing and segments. 
     </td>
     <td>
-      <a href="https://codesandbox.io/s/graphire-forcelayout-example-jet3q"><img src="markdown/preview.png"></a>
-      Graph example in 3D with react-three-fiber (Three.js) using very efficient node instancing and segments. 
+      <a href="https://codesandbox.io/s/graphire-drag-drop-r3f-uski3"><img src="markdown/dragdrop-example.gif"></a>
+      Drag and drop nodes with @use-gesture and react-three-fiber.
     </td>
   </tr>
 </table>
