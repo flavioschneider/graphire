@@ -28,21 +28,21 @@ Some graph/network visualization libraries like D3.js are not made to work with 
 
 <table>
   <tr>
-    <td> 
+    <td width='50%'> 
       <a href="https://codesandbox.io/s/graphire-svg-simple-graph-example-eftpc?file=/src/App.js:184-633"><img src="markdown/svg-example.png"></a>
       Simple example using SVGs without any layout.
     </td>
-    <td>
+    <td width='50%'>
       <a href="https://codesandbox.io/s/graphire-svg-bubble-example-e33ss"><img src="markdown/svg-bubble-example.png"></a>
       Bubble example using SVGs with force layout.
     </td>
   </tr>
   <tr>
-    <td>
+    <td width='50%'>
       <a href="https://codesandbox.io/s/graphire-forcelayout-example-jet3q"><img src="markdown/preview.png"></a>
       Graph example in 3D with react-three-fiber (Three.js) using very efficient node instancing and segments. 
     </td>
-    <td>
+    <td width='50%'>
       <a href="https://codesandbox.io/s/graphire-drag-drop-r3f-uski3"><img src="markdown/dragdrop-example.gif"></a>
       Drag and drop nodes with @use-gesture and react-three-fiber.
     </td>
