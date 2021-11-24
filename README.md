@@ -94,7 +94,7 @@ const Node = (props) => {
 3. Build the `Link` component using the `useLink` hook.
 ```jsx 
 import { useRef } from 'react'
-import { useNode } from 'graphire'
+import { useLink } from 'graphire'
 // Link 
 const Link = (props) => {
   const { source, target, color = 'black', ...rest } = props
